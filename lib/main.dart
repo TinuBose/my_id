@@ -20,7 +20,42 @@ class _QuoteListState extends State<QuoteList> {
     quote(author: '-thomas', text: 'you dont'),
   ];
 
-  Widget template(quote) {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: Text("Awesome Quotes"),
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: quotes.map((quote) {
+          return quoteCard(
+              quote: quote,
+              delete: () {
+                setState(() {
+                  quotes.remove(quote);
+                });
+              });
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class quoteCard extends StatelessWidget {
+  final Function delete;
+  const quoteCard({
+    super.key,
+    required this.quote,
+    required this.delete,
+  });
+
+  final quote;
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Padding(
@@ -46,25 +81,13 @@ class _QuoteListState extends State<QuoteList> {
                 color: Colors.red,
               ),
             ),
+            IconButton(
+                onPressed: () {
+                  delete();
+                },
+                icon: Icon(Icons.delete)),
           ],
         ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text("Awesome Quotes"),
-        backgroundColor: Colors.orange,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: quotes.map((quote) {
-          return template(quote);
-        }).toList(),
       ),
     );
   }
